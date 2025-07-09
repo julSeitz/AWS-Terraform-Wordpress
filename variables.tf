@@ -29,3 +29,10 @@ variable "public_subnet_cidr" {
     description = "CIDR of the Public Subnet"
     type = string
 }
+
+# The WP database password
+variable "db_password" {
+    description = "Password for the wordpress database"
+    type = string
+    sensitive = true
+}
