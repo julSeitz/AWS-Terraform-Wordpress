@@ -1,5 +1,6 @@
 # Defining data sources
 
+# Data source for AMI
 data "aws_ami" "amz_linux" {
     most_recent = true
     owners = ["amazon"]
@@ -22,4 +23,9 @@ data "aws_ami" "amz_linux" {
         name = "architecture"
         values = ["x86_64"]
     }
+}
+
+# Data source for IP of terraform environment 
+data "http" "myip" {
+  url = "https://ipinfo.io/ip"
 }

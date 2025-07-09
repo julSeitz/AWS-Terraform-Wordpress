@@ -3,7 +3,7 @@
 # Create Security Group for SSH access
 resource "aws_security_group" "allow_ssh" {
     name = "allow_ssh"
-    description = "Allow inbound SSH traffic and all outbound traffic"
+    description = "Allow inbound SSH traffic from current IP and all outbound traffic"
     vpc_id = aws_vpc.myVpc.id
 
     tags = {
@@ -11,13 +11,13 @@ resource "aws_security_group" "allow_ssh" {
     }
 }
 
-# Add ingress rule allowing SSH access to allow_ssh Security Group
+# Add ingress rule allowing SSH access to allow_ssh Security Group from current IP
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh_rule" {
     security_group_id = aws_security_group.allow_ssh.id
     from_port = 22
     to_port = 22
     ip_protocol = "tcp"
-    cidr_ipv4 = "0.0.0.0/0"
+    cidr_ipv4 = "${data.http.myip.response_body}/32"
 }
 
 # Add egress rule allowing all egress traffic to allow_ssh Security Group
