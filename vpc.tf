@@ -2,7 +2,7 @@
 
 # Create VPC
 resource "aws_vpc" "myVpc" {
-    cidr_block = "10.0.0.0/26"
+    cidr_block = var.vpc_cidr
 
     tags = {
         Name = "MyVPC"
@@ -12,7 +12,7 @@ resource "aws_vpc" "myVpc" {
 # Create Public Subnet
 resource "aws_subnet" "publicSubnet" {
     vpc_id = aws_vpc.myVpc.id
-    cidr_block = "10.0.0.0/28"
+    cidr_block = var.public_subnet_cidr
 
     tags = {
         Name = "PublicSubnet"

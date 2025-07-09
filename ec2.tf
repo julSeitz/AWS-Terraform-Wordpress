@@ -29,9 +29,9 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 
 # Create EC2 instance
 resource "aws_instance" "myInstance" {
-    ami = "ami-05ee755be0cd7555c"
-    instance_type = "t3.micro"
-    key_name = "vockey"
+    ami = var.amid_id
+    instance_type = var.instance_type
+    key_name = var.key_name
     subnet_id = aws_subnet.publicSubnet.id
     security_groups = [aws_security_group.allow_ssh.id]
     associate_public_ip_address = "true"
