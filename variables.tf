@@ -6,12 +6,6 @@ variable "aws_region" {
     type = string
 }
 
-# The AMI ID to use for EC2 instances
-variable "amid_id" {
-    description = "AMI ID to use for the EC2 instance"
-    type = string
-}
-
 # The instance type to use for EC2 instances
 variable "instance_type"  {
     description = "EC2 instance type"
