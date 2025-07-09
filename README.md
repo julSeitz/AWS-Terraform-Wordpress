@@ -7,4 +7,4 @@ Includes:
 - an IGW
 - a Public Subnet
 - a Security Group allowing SSH access
-- an EC2 instance
+- an EC2 instance with wordpress installed
