@@ -1,28 +1,8 @@
 # Defining data sources
 
 # Data source for AMI
-data "aws_ami" "amz_linux" {
-    most_recent = true
-    owners = ["amazon"]
-    filter {
-        name = "name"
-        values = ["al2023-ami-2023*kernel*"]
-    }
-
-    filter {
-        name = "root-device-type"
-        values = ["ebs"]
-    }
-
-    filter {
-        name = "virtualization-type"
-        values = ["hvm"]
-    }
-
-    filter {
-        name = "architecture"
-        values = ["x86_64"]
-    }
+data "aws_ssm_parameter" "amz_linux" {
+    name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
 # Data source for IP of terraform environment 

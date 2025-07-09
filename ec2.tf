@@ -29,7 +29,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 
 # Create EC2 instance
 resource "aws_instance" "myInstance" {
-    ami = data.aws_ami.amz_linux.id
+    ami = data.aws_ssm_parameter.amz_linux.value
     instance_type = var.instance_type
     key_name = var.key_name
     subnet_id = aws_subnet.publicSubnet.id
