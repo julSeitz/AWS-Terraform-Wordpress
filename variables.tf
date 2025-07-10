@@ -4,6 +4,7 @@
 variable "aws_region" {
     description = "AWS region to deploy into"
     type = string
+    default = "us-west-2"
 }
 
 # The instance type to use for EC2 instances
@@ -24,9 +25,15 @@ variable "vpc_cidr" {
     type = string
 }
 
-# The CIDR block for the Public Subnet
-variable "public_subnet_cidr" {
+# The CIDR block for the Public Subnet A
+variable "public_subnet_a_cidr" {
     description = "CIDR of the Public Subnet"
+    type = string
+}
+
+# The CIDR block for the Public Subnet B
+variable "public_subnet_b_cidr" {
+    description = "CIDR of the Public Subnet B"
     type = string
 }
 
@@ -35,4 +42,18 @@ variable "db_password" {
     description = "Password for the wordpress database"
     type = string
     sensitive = true
+}
+
+# The first Availability Zone
+variable "aws_availability_zone_a" {
+    type = string
+    description = "Value for Availability Zone a"
+    default = "us-west-2a"    
+}
+
+# The second Availability Zone
+variable "aws_availability_zone_b" {
+    type = string
+    description = "Value for Availability Zone b"
+    default = "us-west-2b"    
 }

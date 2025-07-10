@@ -1,0 +1,97 @@
+# Creating Security Groups
+
+# Creating Security Group for SSH access and relevant rules
+
+# Creating Security Group for SSH access
+resource "aws_security_group" "allow_ssh" {
+    name        = "allow_ssh"
+    description = "Allow inbound SSH traffic from current IP and all outbound traffic"
+    vpc_id      = aws_vpc.myVpc.id
+
+    tags = {
+        Name = "allow_ssh"
+    }
+}
+
+# Adding ingress rule allowing SSH access to allow_ssh Security Group from current IP
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_rule" {
+    security_group_id = aws_security_group.allow_ssh.id
+    from_port   = 22
+    to_port     = 22
+    ip_protocol = "tcp"
+    cidr_ipv4   = "${data.http.myip.response_body}/32"
+}
+
+# Adding egress rule allowing all egress traffic to allow_ssh Security Group
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_ssh_sg" {
+  security_group_id = aws_security_group.allow_ssh.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
+# Creating Security Group for Application Load Balancer and relevant rules
+
+# Creating Security Group for Appliaction Load Balancer
+resource "aws_security_group" "alb_sg" {
+    name        = "alb_sg"
+    description = "Allows HTTP traffic through the Application Load Balancer"
+    vpc_id      = aws_vpc.myVpc.id
+
+    tags = {
+        Name = "alb_sg"
+    }
+}
+
+# Adding ingress rule allowing HTTP access to alb_sg from current IP
+resource "aws_vpc_security_group_ingress_rule" "allow_http_rule_alb" {
+    security_group_id = aws_security_group.alb_sg.id
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "${data.http.myip.response_body}/32"
+}
+
+# Adding egress rule allowing all egress traffic from alb_sg
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_alb" {
+    security_group_id = aws_security_group.alb_sg.id
+    cidr_ipv4   = "0.0.0.0/0"
+    ip_protocol = "-1" # semantically equivalent to all ports
+}
+
+# Creating Security Group for Web Server and relevant rules
+
+# Creating Security Group for Web Server
+resource "aws_security_group" "webserver_sg" {
+    name        = "webserver_sg"
+    description = "Allow inbound HTTP traffic and all outbound traffic"
+    vpc_id      = aws_vpc.myVpc.id
+
+    tags = {
+      Name = "webserver_sg"
+    }
+}
+
+# Adding ingress rule allowing HTTP access to webserver_sg from current IP
+resource "aws_vpc_security_group_ingress_rule" "allow_http_rule_webserver" {
+    security_group_id = aws_security_group.webserver_sg.id
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "${data.http.myip.response_body}/32"
+}
+
+# Adding ingress rule allowing HTTP acces to webserver_sg from alb_sg
+resource "aws_vpc_security_group_ingress_rule" "allow_alb_rule" {
+    security_group_id = aws_security_group.webserver_sg.id
+    from_port                    = 80
+    to_port                      = 80
+    ip_protocol                  = "tcp"
+    referenced_security_group_id = aws_security_group.alb_sg.id
+}
+
+# Adding egress rule allowing all egress traffic from webserver_sg
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_webserver" {
+    security_group_id = aws_security_group.webserver_sg.id
+    cidr_ipv4   = "0.0.0.0/0"
+    ip_protocol = "-1" # semantically equivalent to all ports
+}

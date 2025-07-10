@@ -9,13 +9,27 @@ resource "aws_vpc" "myVpc" {
     }
 }
 
-# Create Public Subnet
-resource "aws_subnet" "publicSubnet" {
+# Create Public Subnet A
+resource "aws_subnet" "publicSubnetA" {
     vpc_id = aws_vpc.myVpc.id
-    cidr_block = var.public_subnet_cidr
+    cidr_block = var.public_subnet_a_cidr
+    availability_zone = var.aws_availability_zone_a
+    map_public_ip_on_launch = true
 
     tags = {
-        Name = "PublicSubnet"
+        Name = "PublicSubnet A"
+    }
+}
+
+# Create Public Subnet B
+resource "aws_subnet" "publicSubnetB" {
+    vpc_id = aws_vpc.myVpc.id
+    cidr_block = var.public_subnet_b_cidr
+    availability_zone = var.aws_availability_zone_b
+    map_public_ip_on_launch = true
+
+    tags = {
+        Name = "PublicSubnet B"
     }
 }
 
@@ -26,11 +40,4 @@ resource "aws_internet_gateway" "myIgw" {
     tags = {
         Name = "InternetGateway"
     }
-}
-
-# Create Route to Public Subnet
-resource "aws_route" "publicRoute" {
-    gateway_id = aws_internet_gateway.myIgw.id
-    route_table_id = aws_vpc.myVpc.main_route_table_id
-    destination_cidr_block = "0.0.0.0/0"
 }
