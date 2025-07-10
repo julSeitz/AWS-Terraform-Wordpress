@@ -13,7 +13,7 @@ resource "aws_instance" "myTestInstanceOne" {
         aws_security_group.webserver_sg.id
         ]
 
-    user_data = file("loadbalancer_test.sh")
+    user_data = file("Scripts/loadbalancer_test.sh")
 
     tags =  {
         Name = "myTestInstanceOne"
@@ -32,7 +32,7 @@ resource "aws_instance" "myTestInstanceTwo" {
         aws_security_group.webserver_sg.id
         ]
 
-    user_data = file("loadbalancer_test.sh")
+    user_data = file("Scripts/loadbalancer_test.sh")
 
     tags =  {
         Name = "myTestInstanceTwo"
