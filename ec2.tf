@@ -38,13 +38,13 @@ resource "aws_security_group" "allow_http" {
     }
 }
 
-# Add ingress rule allowing HTTP access to allow_http Security Group
+# Add ingress rule allowing HTTP access to allow_http Security Group from current IP
 resource "aws_vpc_security_group_ingress_rule" "allow_http_rule" {
     security_group_id = aws_security_group.allow_http.id
     from_port = 80
     to_port = 80
     ip_protocol = "tcp"
-    cidr_ipv4 = "0.0.0.0/0"
+    cidr_ipv4 = "${data.http.myip.response_body}/32"
 }
 
 # Add egress rule allowing all egress traffic to allow_http Security Group
