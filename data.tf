@@ -6,6 +6,6 @@ data "aws_ssm_parameter" "amz_linux" {
 }
 
 # Data source for IP of terraform environment 
-data "http" "myip" {
+data "http" "my_ip" {
   url = "https://ipinfo.io/ip"
 }

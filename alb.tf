@@ -5,7 +5,7 @@ resource "aws_lb" "wordpress" {
     name = "wordpress-app-lb"
     internal = false
     load_balancer_type = "application"
-    subnets = [aws_subnet.publicSubnetA.id,aws_subnet.publicSubnetB.id]
+    subnets = [aws_subnet.public_subnet_a.id,aws_subnet.public_subnet_b.id]
     security_groups = [aws_security_group.alb_sg.id]
 }
 
