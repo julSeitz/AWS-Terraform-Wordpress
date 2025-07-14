@@ -5,7 +5,7 @@ resource "aws_launch_template" "test_template" {
     name                   = "auto_scaling_test"
     image_id               = data.aws_ssm_parameter.amz_linux.value
     instance_type          = var.instance_type
-    user_data              = base64encode(file("Scripts/autoscaling_test.sh"))
+    user_data              = base64encode(file("Scripts/alb_and_autoscaling_test.sh"))
     key_name = var.key_name
 
     network_interfaces {
@@ -72,4 +72,10 @@ resource "aws_autoscaling_group" "test_autoscaling_group" {
         aws_subnet.public_subnet_a.id,
         aws_subnet.public_subnet_b.id
     ]
+}
+
+# Attaching Autscaling Group to ALB Target Group
+resource "aws_autoscaling_attachment" "autoscaling_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.test_autoscaling_group.id
+  lb_target_group_arn = aws_lb_target_group.autoscaling_tg.arn
 }
