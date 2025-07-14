@@ -14,15 +14,10 @@ resource "aws_route_table" "public_route_table" {
   }
 }
 
-# Associationg Public Subnet A with the Public Route Table
-resource "aws_route_table_association" "public_subnet_a_association" {
-  subnet_id      = aws_subnet.public_subnet_a.id
-  route_table_id = aws_route_table.public_route_table.id
-}
-
-# Associationg Public Subnet B with the Public Route Table
-resource "aws_route_table_association" "public_subnet_b_association" {
-  subnet_id      = aws_subnet.public_subnet_b.id
+# Associating Public Route Table with Public Subnets
+resource "aws_route_table_association" "public_route_table_association" {
+  count          = length(local.public_subnet_ids)
+  subnet_id      = element(local.public_subnet_ids, count.index)
   route_table_id = aws_route_table.public_route_table.id
 }
 
