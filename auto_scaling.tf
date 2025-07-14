@@ -9,11 +9,10 @@ resource "aws_launch_template" "test_template" {
   key_name      = var.key_name
 
   network_interfaces {
-    associate_public_ip_address = true
 
     security_groups = [
       aws_security_group.webserver_sg.id,
-      aws_security_group.allow_ssh.id
+      aws_security_group.allow_ssh_sg.id
     ]
   }
 
@@ -55,6 +54,7 @@ resource "aws_autoscaling_policy" "test_policy" {
 
 # Creating Auto Scaling Group
 resource "aws_autoscaling_group" "test_autoscaling_group" {
+  depends_on       = [aws_route_table_association.private_route_table_association]
   name             = "test_autoscaling_group"
   max_size         = 4
   min_size         = 2
@@ -68,10 +68,7 @@ resource "aws_autoscaling_group" "test_autoscaling_group" {
   health_check_type         = "EC2"
   health_check_grace_period = 300
 
-  vpc_zone_identifier = [
-    aws_subnet.public_subnet_a.id,
-    aws_subnet.public_subnet_b.id
-  ]
+  vpc_zone_identifier = local.private_subnet_ids
 }
 
 # Attaching Autscaling Group to ALB Target Group

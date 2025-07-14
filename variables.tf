@@ -37,6 +37,18 @@ variable "public_subnet_b_cidr" {
   type        = string
 }
 
+# The CIDR block for the Private Subnet A
+variable "private_subnet_a_cidr" {
+  description = "CIDR of the Private Subnet A"
+  type        = string
+}
+
+# The CIDR block for the Private Subnet B
+variable "private_subnet_b_cidr" {
+  description = "CIDR of the Private Subnet B"
+  type        = string
+}
+
 # The WP database password
 variable "db_password" {
   description = "Password for the wordpress database"

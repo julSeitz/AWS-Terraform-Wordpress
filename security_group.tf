@@ -1,11 +1,40 @@
 # Creating Security Groups
 
+# Creating Security Group for Bastion Host and relevant rules
+
+# Creating Security Group for Bastion Host
+resource "aws_security_group" "bastion_host_sg" {
+  name        = "bastion_host_sg"
+  description = "Allow inbound SSH traffic from current IP and all outbound traffic"
+  vpc_id      = aws_vpc.wordpress_vpc.id
+
+  tags = {
+    Name = "Bastion Host SG"
+  }
+}
+
+# Adding ingress rule allowing SSH access to bastion_host_sg Security Group from current IP
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_rule_bastion" {
+  security_group_id = aws_security_group.bastion_host_sg.id
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "${data.http.my_ip.response_body}/32"
+}
+
+# Adding egress rule allowing all egress traffic to bastion_host_sg Security Group
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_bastion" {
+  security_group_id = aws_security_group.bastion_host_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
 # Creating Security Group for SSH access and relevant rules
 
 # Creating Security Group for SSH access
-resource "aws_security_group" "allow_ssh" {
+resource "aws_security_group" "allow_ssh_sg" {
   name        = "allow_ssh"
-  description = "Allow inbound SSH traffic from current IP and all outbound traffic"
+  description = "Allow inbound SSH traffic from Bastion Host"
   vpc_id      = aws_vpc.wordpress_vpc.id
 
   tags = {
@@ -13,18 +42,18 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
-# Adding ingress rule allowing SSH access to allow_ssh Security Group from current IP
+# Adding ingress rule allowing SSH access to allow_ssh Security Group from Bastion Host
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh_rule" {
-  security_group_id = aws_security_group.allow_ssh.id
-  from_port         = 22
-  to_port           = 22
-  ip_protocol       = "tcp"
-  cidr_ipv4         = "${data.http.my_ip.response_body}/32"
+  security_group_id            = aws_security_group.allow_ssh_sg.id
+  from_port                    = 22
+  to_port                      = 22
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.bastion_host_sg.id
 }
 
-# Adding egress rule allowing all egress traffic to allow_ssh Security Group
-resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_ssh_sg" {
-  security_group_id = aws_security_group.allow_ssh.id
+# Adding egress rule allowing all egress traffic to bastion_host_sg Security Group
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_ssh" {
+  security_group_id = aws_security_group.allow_ssh_sg.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
