@@ -88,3 +88,24 @@ variable "db_user" {
   type        = string
   description = "User name for the database"
 }
+
+# The max amount of instances in Autoscaling Group
+variable "autoscaling_max_capacity" {
+  type        = number
+  description = "value"
+  default     = 2
+}
+
+# The min amount of instances in Autoscaling Group
+variable "autoscaling_min_capacity" {
+  type        = number
+  description = "value"
+  default     = 1
+}
+
+# The desired amount of instances in Autoscaling Group
+variable "autoscaling_desired_capacity" {
+  type        = number
+  description = "value"
+  default     = 1
+}
