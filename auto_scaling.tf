@@ -5,8 +5,18 @@ resource "aws_launch_template" "test_template" {
   name          = "auto_scaling_test"
   image_id      = data.aws_ssm_parameter.amz_linux.value
   instance_type = var.instance_type
-  user_data     = base64encode(file("Scripts/alb_and_autoscaling_test.sh"))
-  key_name      = var.key_name
+  user_data = base64encode(
+    templatefile(
+      "Scripts/user_data.sh",
+      {
+        db_name     = var.db_name,
+        db_user     = var.db_user,
+        db_password = var.db_password,
+        db_host     = aws_db_instance.wordpress_db.endpoint
+      }
+    )
+  )
+  key_name = var.key_name
 
   network_interfaces {
 

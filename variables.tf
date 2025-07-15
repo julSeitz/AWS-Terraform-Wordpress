@@ -76,3 +76,15 @@ variable "target_load" {
   description = "Target value for ASGAverageCPUUtilization during Autoscaling"
   default     = 50
 }
+
+# The name of the database
+variable "db_name" {
+  type        = string
+  description = "Name of the database"
+}
+
+# The user name for the DBMS
+variable "db_user" {
+  type        = string
+  description = "User name for the database"
+}

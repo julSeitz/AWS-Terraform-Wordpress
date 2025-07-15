@@ -124,3 +124,32 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_webser
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
+
+# Creating Security Group for Database Server and relevant rules
+
+# Creating Security Group for MariaDB RDS Server
+resource "aws_security_group" "mariadb_sg" {
+  name        = "mariadb_sg"
+  description = "Allow inbound traffic for MariaDB"
+  vpc_id      = aws_vpc.wordpress_vpc.id
+
+  tags = {
+    Name = "MariaDB SG"
+  }
+}
+
+# Adding ingress rule allowing MariaDB traffic to mariadb_sg from webserver_sg
+resource "aws_vpc_security_group_ingress_rule" "allow_mariadb_ingress_rule_db" {
+  security_group_id            = aws_security_group.mariadb_sg.id
+  from_port                    = 3306
+  to_port                      = 3306
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.webserver_sg.id
+}
+
+# Adding egress rule allowing all traffic to mariadb_sg
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_db" {
+  security_group_id = aws_security_group.mariadb_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
