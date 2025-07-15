@@ -48,7 +48,7 @@ resource "aws_autoscaling_policy" "test_policy" {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
-    target_value = 20
+    target_value = var.target_load
   }
 }
 

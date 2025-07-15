@@ -69,3 +69,10 @@ variable "aws_availability_zone_b" {
   description = "Value for Availability Zone b"
   default     = "us-west-2b"
 }
+
+# The Average CPU Utilization to aim for with Autoscaling
+variable "target_load" {
+  type        = number
+  description = "Target value for ASGAverageCPUUtilization during Autoscaling"
+  default     = 50
+}
