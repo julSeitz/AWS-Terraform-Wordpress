@@ -220,3 +220,21 @@ resource "aws_iam_role_policy_attachment" "update_autoscaling_group_role_policy_
   role       = aws_iam_role.update_autoscaling_group_role.name
   policy_arn = local.update_autoscaling_group_role_policies[count.index]
 }
+
+# Creating IAM role for invoking AWS Lambda savings functions for autoscaling group
+locals {
+  invoke_autoscaling_savings_functions_role_policies = [
+    data.aws_iam_policy.invoke_autoscaling_savings_functions_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "invoke_autoscaling_savings_functions_role" {
+  name               = "invoke_autoscaling_savings_functions_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "invoke_autoscaling_savings_functions_role_policy_attachments" {
+  count      = length(local.invoke_autoscaling_savings_functions_role_policies)
+  role       = aws_iam_role.invoke_autoscaling_savings_functions_role.name
+  policy_arn = local.invoke_autoscaling_savings_functions_role_policies[count.index]
+}

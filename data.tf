@@ -115,6 +115,10 @@ data "aws_iam_policy" "update_autoscaling_group_policy" {
   name = "UpdateAutoscalingGroup"
 }
 
+data "aws_iam_policy" "invoke_autoscaling_savings_functions_policy" {
+  name = "InvokeASGSavingsMode"
+}
+
 # Defining data sources for ZIP archives of AWS Lambda Functions
 
 data "archive_file" "run_instance" {

@@ -139,3 +139,15 @@ variable "wordpress_application_bucket_archive_prefix" {
   description = "The prefix for the archive of WordPress application files within the S3 bucket"
   type        = string
 }
+
+# The cron expression to schedule the invokation of the set_asg_to_idle lambda function
+variable "set_asg_to_idle_function_invokation_cron_expression" {
+  description = "The cron expression to schedule the invokation of the set_asg_to_idle lambda function"
+  type        = string
+}
+
+# The cron expression to schedule the invokation of the set_asg_to_active lambda function
+variable "set_asg_to_active_function_invokation_cron_expression" {
+  description = "The cron expression to schedule the invokation of the set_asg_to_active lambda function"
+  type        = string
+}
