@@ -127,3 +127,9 @@ variable "python_runtime_environment" {
   description = "The python version for the lambda runtime environment"
   type        = string
 }
+
+# The name of the bucket to store WordPress application data in
+variable "wordpress_application_bucket_name" {
+  description = "The name of the bucket to store WordPress application data in"
+  type        = string
+}
