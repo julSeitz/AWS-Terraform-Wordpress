@@ -1,0 +1,155 @@
+# Creating IAM resources
+
+
+resource "aws_iam_role" "run_instances_role" {
+  name               = "run_instances_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+locals {
+  run_instance_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.run_instances_policy.arn
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "run_instances_role_policy_attachments" {
+  count      = length(local.run_instance_role_policies)
+  role       = aws_iam_role.run_instances_role.name
+  policy_arn = local.run_instance_role_policies[count.index]
+}
+
+locals {
+  update_launch_template_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.describe_images_policy.arn,
+    data.aws_iam_policy.deregister_images_policy.arn,
+    data.aws_iam_policy.update_launch_template_policy.arn,
+    data.aws_iam_policy.terminate_instances_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "update_launch_template_role" {
+  name               = "update_launch_template"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "update_launch_template_role_policy_attachments" {
+  count      = length(local.update_launch_template_role_policies)
+  role       = aws_iam_role.update_launch_template_role.name
+  policy_arn = local.update_launch_template_role_policies[count.index]
+}
+
+locals {
+  create_tags_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.create_tags_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "create_tags_role" {
+  name               = "create_tags_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "create_tags_role_policy_attachments" {
+  count      = length(local.create_tags_role_policies)
+  role       = aws_iam_role.create_tags_role.name
+  policy_arn = local.create_tags_role_policies[count.index]
+}
+
+resource "aws_iam_instance_profile" "create_tags_instance_profile" {
+  name = "create_instance_profile"
+  role = aws_iam_role.create_tags_role.name
+}
+
+locals {
+  describe_instances_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.describe_instances_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "describe_instances_role" {
+  name               = "describe_instances_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "describe_instances_role_policy_attachments" {
+  count      = length(local.describe_instances_role_policies)
+  role       = aws_iam_role.describe_instances_role.name
+  policy_arn = local.describe_instances_role_policies[count.index]
+}
+
+locals {
+  ami_step_function_role_policies = [
+    data.aws_iam_policy.invoke_lambda_policy.arn,
+    data.aws_iam_policy.publish_sns_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "ami_step_function_role" {
+  name               = "ami_step_function_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "ami_step_function_role_policy_attachments" {
+  count      = length(local.ami_step_function_role_policies)
+  role       = aws_iam_role.ami_step_function_role.name
+  policy_arn = local.ami_step_function_role_policies[count.index]
+}
+
+locals {
+  create_image_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.create_image_policy.arn,
+    data.aws_iam_policy.create_tags_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "create_image_role" {
+  name               = "create_image_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "create_image_role_policy_attachments" {
+  count      = length(local.create_image_role_policies)
+  role       = aws_iam_role.create_image_role.name
+  policy_arn = local.create_image_role_policies[count.index]
+}
+
+locals {
+  describe_images_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.describe_images_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "describe_images_role" {
+  name               = "describe_images_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "describe_images_role_policy_attachments" {
+  count      = length(local.describe_images_role_policies)
+  role       = aws_iam_role.describe_images_role.name
+  policy_arn = local.describe_images_role_policies[count.index]
+}
+
+locals {
+  terminate_instances_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.terminate_instances_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "terminate_instance_role" {
+  name               = "terminate_instance_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "terminate_instances_role_policy_attachments" {
+  count      = length(local.terminate_instances_role_policies)
+  role       = aws_iam_role.terminate_instance_role.name
+  policy_arn = local.terminate_instances_role_policies[count.index]
+}

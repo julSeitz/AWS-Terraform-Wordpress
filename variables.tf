@@ -4,7 +4,7 @@
 variable "aws_region" {
   description = "AWS region to deploy into"
   type        = string
-  default     = "us-west-2"
+  default     = "eu-central-1"
 }
 
 # The instance type to use for EC2 instances
@@ -27,7 +27,7 @@ variable "vpc_cidr" {
 
 # The CIDR block for the Public Subnet A
 variable "public_subnet_a_cidr" {
-  description = "CIDR of the Public Subnet"
+  description = "CIDR of the Public Subnet A"
   type        = string
 }
 
@@ -60,14 +60,14 @@ variable "db_password" {
 variable "aws_availability_zone_a" {
   type        = string
   description = "Value for Availability Zone a"
-  default     = "us-west-2a"
+  default     = "eu-central-1a"
 }
 
 # The second Availability Zone
 variable "aws_availability_zone_b" {
   type        = string
   description = "Value for Availability Zone b"
-  default     = "us-west-2b"
+  default     = "eu-central-1b"
 }
 
 # The Average CPU Utilization to aim for with Autoscaling
@@ -108,4 +108,22 @@ variable "autoscaling_desired_capacity" {
   type        = number
   description = "value"
   default     = 1
+}
+
+# The email to send SNS notifications about errors to
+variable "error_notification_email" {
+  description = "Email notify about errors in important automated processes to"
+  type        = string
+}
+
+# The number of days to keep nightly build AMIs
+variable "image_retention_time_in_days" {
+  description = "Number of days to keep nightly build images"
+  type        = number
+}
+
+# The python version for AWS Lambda Functions
+variable "python_runtime_environment" {
+  description = "The python version for the lambda runtime environment"
+  type        = string
 }
