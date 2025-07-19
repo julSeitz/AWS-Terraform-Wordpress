@@ -115,8 +115,16 @@ data "aws_iam_policy" "update_autoscaling_group_policy" {
   name = "UpdateAutoscalingGroup"
 }
 
-data "aws_iam_policy" "invoke_autoscaling_savings_functions_policy" {
-  name = "InvokeASGSavingsMode"
+data "aws_iam_policy" "activate_savings_mode_policy" {
+  name = "ActivateSavingsMode"
+}
+
+data "aws_iam_policy" "deactivate_savings_mode_policy" {
+  name = "DeactivateSavingsMode"
+}
+
+data "aws_iam_policy" "start_and_stop_db_policy" {
+  name = "StartAndStopDB"
 }
 
 # Defining data sources for ZIP archives of AWS Lambda Functions
@@ -167,4 +175,16 @@ data "archive_file" "set_asg_to_active" {
   type        = "zip"
   source_file = "Lambda-Functions/src/set_asg_to_active.py"
   output_path = "Lambda-Functions/archive/set_asg_to_active.zip"
+}
+
+data "archive_file" "stop_database" {
+  type        = "zip"
+  source_file = "Lambda-Functions/src/stop_database.py"
+  output_path = "Lambda-Functions/archive/stop_database.zip"
+}
+
+data "archive_file" "resume_database" {
+  type        = "zip"
+  source_file = "Lambda-Functions/src/resume_database.py"
+  output_path = "Lambda-Functions/archive/resume_database.zip"
 }

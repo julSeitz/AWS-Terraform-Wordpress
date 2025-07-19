@@ -140,14 +140,14 @@ variable "wordpress_application_bucket_archive_prefix" {
   type        = string
 }
 
-# The cron expression to schedule the invokation of the set_asg_to_idle lambda function
-variable "set_asg_to_idle_function_invokation_cron_expression" {
-  description = "The cron expression to schedule the invokation of the set_asg_to_idle lambda function"
+# The cron expression to schedule the actication of savings mode
+variable "activate_savings_mode_cron_expression" {
+  description = "The cron expression to schedule the actication of savings mode"
   type        = string
 }
 
-# The cron expression to schedule the invokation of the set_asg_to_active lambda function
-variable "set_asg_to_active_function_invokation_cron_expression" {
-  description = "The cron expression to schedule the invokation of the set_asg_to_active lambda function"
+# The cron expression to schedule the deactication of savings mode
+variable "deactivate_savings_mode_cron_expression" {
+  description = "The cron expression to schedule the deactication of savings mode"
   type        = string
 }

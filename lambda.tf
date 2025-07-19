@@ -119,3 +119,29 @@ resource "aws_lambda_function" "set_asg_to_active" {
 
   runtime = var.python_runtime_environment
 }
+
+# AWS Lambda function to stop RDS database
+resource "aws_lambda_function" "stop_database" {
+  filename         = data.archive_file.stop_database.output_path
+  function_name    = "stop_database"
+  role             = aws_iam_role.start_and_stop_db_role.arn
+  handler          = "stop_database.lambda_handler"
+  source_code_hash = data.archive_file.stop_database.output_base64sha256
+
+  timeout = 10
+
+  runtime = var.python_runtime_environment
+}
+
+# AWS Lambda function to resume_database RDS database
+resource "aws_lambda_function" "resume_database" {
+  filename         = data.archive_file.resume_database.output_path
+  function_name    = "resume_database"
+  role             = aws_iam_role.start_and_stop_db_role.arn
+  handler          = "resume_database.lambda_handler"
+  source_code_hash = data.archive_file.resume_database.output_base64sha256
+
+  timeout = 10
+
+  runtime = var.python_runtime_environment
+}

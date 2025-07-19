@@ -222,20 +222,57 @@ resource "aws_iam_role_policy_attachment" "update_autoscaling_group_role_policy_
   policy_arn = local.update_autoscaling_group_role_policies[count.index]
 }
 
-# Creating IAM role for invoking AWS Lambda savings functions for autoscaling group
+# Creating IAM role for invoking AWS Lambda functions that activate savings mode
 locals {
-  invoke_autoscaling_savings_functions_role_policies = [
-    data.aws_iam_policy.invoke_autoscaling_savings_functions_policy.arn
+  activate_savings_mode_role_policies = [
+    data.aws_iam_policy.activate_savings_mode_policy.arn
   ]
 }
 
-resource "aws_iam_role" "invoke_autoscaling_savings_functions_role" {
-  name               = "invoke_autoscaling_savings_functions_role"
+resource "aws_iam_role" "activate_savings_mode_role" {
+  name               = "activate_savings_mode_role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-resource "aws_iam_role_policy_attachment" "invoke_autoscaling_savings_functions_role_policy_attachments" {
-  count      = length(local.invoke_autoscaling_savings_functions_role_policies)
-  role       = aws_iam_role.invoke_autoscaling_savings_functions_role.name
-  policy_arn = local.invoke_autoscaling_savings_functions_role_policies[count.index]
+resource "aws_iam_role_policy_attachment" "activate_savings_mode_role_policy_attachments" {
+  count      = length(local.activate_savings_mode_role_policies)
+  role       = aws_iam_role.activate_savings_mode_role.name
+  policy_arn = local.activate_savings_mode_role_policies[count.index]
+}
+
+# Creating IAM role for invoking AWS Lambda functions that deactivate savings mode
+locals {
+  deactivate_savings_mode_role_policies = [
+    data.aws_iam_policy.deactivate_savings_mode_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "deactivate_savings_mode_role" {
+  name               = "deactivate_savings_mode_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "deactivate_savings_mode_role_policy_attachments" {
+  count      = length(local.deactivate_savings_mode_role_policies)
+  role       = aws_iam_role.deactivate_savings_mode_role.name
+  policy_arn = local.deactivate_savings_mode_role_policies[count.index]
+}
+
+# Creating IAM role for starting and stopping RDS database
+locals {
+  start_and_stop_db_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
+    data.aws_iam_policy.start_and_stop_db_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "start_and_stop_db_role" {
+  name               = "start_and_stop_db_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "start_and_stop_db_role_policy_attachments" {
+  count      = length(local.start_and_stop_db_role_policies)
+  role       = aws_iam_role.start_and_stop_db_role.name
+  policy_arn = local.start_and_stop_db_role_policies[count.index]
 }
