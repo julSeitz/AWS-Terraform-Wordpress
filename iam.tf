@@ -1,6 +1,6 @@
 # Creating IAM resources
 
-
+# Creating IAM role to run instances
 resource "aws_iam_role" "run_instances_role" {
   name               = "run_instances_role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
@@ -19,6 +19,7 @@ resource "aws_iam_role_policy_attachment" "run_instances_role_policy_attachments
   policy_arn = local.run_instance_role_policies[count.index]
 }
 
+# Creating IAM role to update Launch Templates
 locals {
   update_launch_template_role_policies = [
     data.aws_iam_policy.basic_execution_policy.arn,
@@ -40,6 +41,7 @@ resource "aws_iam_role_policy_attachment" "update_launch_template_role_policy_at
   policy_arn = local.update_launch_template_role_policies[count.index]
 }
 
+# Creating IAM role and instance profile to create tags
 locals {
   create_tags_role_policies = [
     data.aws_iam_policy.basic_execution_policy.arn,
@@ -63,6 +65,7 @@ resource "aws_iam_instance_profile" "create_tags_instance_profile" {
   role = aws_iam_role.create_tags_role.name
 }
 
+# Creating IAM role to describe EC2 instances
 locals {
   describe_instances_role_policies = [
     data.aws_iam_policy.basic_execution_policy.arn,
@@ -81,6 +84,7 @@ resource "aws_iam_role_policy_attachment" "describe_instances_role_policy_attach
   policy_arn = local.describe_instances_role_policies[count.index]
 }
 
+# Creating IAM role for AWS Step Function
 locals {
   ami_step_function_role_policies = [
     data.aws_iam_policy.invoke_lambda_policy.arn,
@@ -99,6 +103,7 @@ resource "aws_iam_role_policy_attachment" "ami_step_function_role_policy_attachm
   policy_arn = local.ami_step_function_role_policies[count.index]
 }
 
+# Creating IAM role for creating AMIs
 locals {
   create_image_role_policies = [
     data.aws_iam_policy.basic_execution_policy.arn,
@@ -118,6 +123,7 @@ resource "aws_iam_role_policy_attachment" "create_image_role_policy_attachments"
   policy_arn = local.create_image_role_policies[count.index]
 }
 
+# Creating IAM role for desribing AMIs
 locals {
   describe_images_role_policies = [
     data.aws_iam_policy.basic_execution_policy.arn,
@@ -136,6 +142,7 @@ resource "aws_iam_role_policy_attachment" "describe_images_role_policy_attachmen
   policy_arn = local.describe_images_role_policies[count.index]
 }
 
+# Creating IAM role for terminating EC2 instances
 locals {
   terminate_instances_role_policies = [
     data.aws_iam_policy.basic_execution_policy.arn,
@@ -154,6 +161,7 @@ resource "aws_iam_role_policy_attachment" "terminate_instances_role_policy_attac
   policy_arn = local.terminate_instances_role_policies[count.index]
 }
 
+# Creating IAM role for executing a Step Function
 locals {
   start_step_function_role_policies = [
     data.aws_iam_policy.start_step_function_policy.arn
