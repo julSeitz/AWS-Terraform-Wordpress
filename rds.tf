@@ -24,4 +24,5 @@ resource "aws_db_instance" "wordpress_db" {
   allocated_storage      = 5
   storage_type           = "gp2"
   multi_az               = false
+  skip_final_snapshot    = true
 }
