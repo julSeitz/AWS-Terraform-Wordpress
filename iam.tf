@@ -153,3 +153,20 @@ resource "aws_iam_role_policy_attachment" "terminate_instances_role_policy_attac
   role       = aws_iam_role.terminate_instance_role.name
   policy_arn = local.terminate_instances_role_policies[count.index]
 }
+
+locals {
+  start_step_function_role_policies = [
+    data.aws_iam_policy.start_step_function_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "start_step_function_role" {
+  name               = "start_step_function_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "start_step_function_role_policy_attachments" {
+  count      = length(local.start_step_function_role_policies)
+  role       = aws_iam_role.start_step_function_role.name
+  policy_arn = local.start_step_function_role_policies[count.index]
+}

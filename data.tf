@@ -97,6 +97,10 @@ data "aws_iam_policy" "publish_sns_policy" {
   name = "PublishSNS"
 }
 
+data "aws_iam_policy" "start_step_function_policy" {
+  name = "StartStepFunction"
+}
+
 # Defining data sources for ZIP archives of AWS Lambda Functions
 
 data "archive_file" "run_instance" {
