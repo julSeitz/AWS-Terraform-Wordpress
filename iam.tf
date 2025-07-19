@@ -206,6 +206,7 @@ resource "aws_iam_instance_profile" "get_wp_archive_from_s3_instance_profile" {
 # Creating role for updating autoscaling groups
 locals {
   update_autoscaling_group_role_policies = [
+    data.aws_iam_policy.basic_execution_policy.arn,
     data.aws_iam_policy.update_autoscaling_group_policy.arn
   ]
 }
