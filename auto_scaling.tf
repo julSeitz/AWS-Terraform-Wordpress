@@ -3,11 +3,11 @@
 # Creating EC2 Launch Template
 resource "aws_launch_template" "test_template" {
   name          = "auto_scaling_test"
-  image_id      = data.aws_ssm_parameter.amz_linux.value
+  image_id      = data.aws_ami.initial_launch_template_ami.id
   instance_type = var.instance_type
   user_data = base64encode(
     templatefile(
-      "Scripts/user_data.sh",
+      "Scripts/user_data.tftpl",
       {
         db_name     = var.db_name,
         db_user     = var.db_user,
