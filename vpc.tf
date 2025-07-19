@@ -17,3 +17,41 @@ resource "aws_internet_gateway" "wordpress_igw" {
     Name = "Internet Gateway"
   }
 }
+
+# Creating VPC Gateway endpoint for S3
+resource "aws_vpc_endpoint" "s3_wp_endpoint" {
+  vpc_id            = aws_vpc.wordpress_vpc.id
+  vpc_endpoint_type = "Gateway"
+  service_name      = "com.amazonaws.${var.aws_region}.s3"
+  route_table_ids   = [aws_route_table.private_route_table.id]
+}
+
+# Creating endpoint policy for VPC Gateway endpoint
+resource "aws_vpc_endpoint_policy" "s3_wp_endpoint_policy" {
+  vpc_endpoint_id = aws_vpc_endpoint.s3_wp_endpoint.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowReadS3WP",
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : "*"
+        },
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetObject"
+        ],
+        "Resource" : [
+          "${aws_s3_bucket.wordpress_application_data_bucket.arn}",
+          "${aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_archive_prefix}/latest.zip"
+        ],
+        "Condition" : {
+          "StringEquals" : {
+            "aws:PrincipalArn" : "${aws_iam_role.get_wp_archive_from_s3_role.arn}"
+          }
+        }
+      }
+    ]
+  })
+}

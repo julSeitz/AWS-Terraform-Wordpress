@@ -23,12 +23,8 @@ resource "aws_route_table_association" "public_route_table_association" {
 
 # Creating Private Route Table
 resource "aws_route_table" "private_route_table" {
-  depends_on = [aws_nat_gateway.nat_gateway]
-  vpc_id     = aws_vpc.wordpress_vpc.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.nat_gateway.id
-  }
+  # depends_on = [aws_nat_gateway.nat_gateway]
+  vpc_id = aws_vpc.wordpress_vpc.id
 
   tags = {
     Name = "Private Route Table"

@@ -102,6 +102,10 @@ data "aws_iam_policy" "start_step_function_policy" {
   name = "StartStepFunction"
 }
 
+data "aws_iam_policy" "get_wp_archive_from_s3_policy" {
+  name = "GetWPArchiveFromS3"
+}
+
 # Defining data sources for ZIP archives of AWS Lambda Functions
 
 data "archive_file" "run_instance" {

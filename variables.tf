@@ -133,3 +133,9 @@ variable "wordpress_application_bucket_name" {
   description = "The name of the bucket to store WordPress application data in"
   type        = string
 }
+
+# The prefix for the archive of WordPress application files within the S3 bucket
+variable "wordpress_application_bucket_archive_prefix" {
+  description = "The prefix for the archive of WordPress application files within the S3 bucket"
+  type        = string
+}

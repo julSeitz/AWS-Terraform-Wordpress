@@ -178,3 +178,27 @@ resource "aws_iam_role_policy_attachment" "start_step_function_role_policy_attac
   role       = aws_iam_role.start_step_function_role.name
   policy_arn = local.start_step_function_role_policies[count.index]
 }
+
+# Creating IAM role and instance profile for getting WordPress archive file from S3 bucket via VPC endpoint
+
+locals {
+  get_wp_archive_from_s3_role_policies = [
+    data.aws_iam_policy.get_wp_archive_from_s3_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "get_wp_archive_from_s3_role" {
+  name               = "get_wp_archive_from_s3_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "get_wp_archive_from_s3_role_policy_attachments" {
+  count      = length(local.get_wp_archive_from_s3_role_policies)
+  role       = aws_iam_role.get_wp_archive_from_s3_role.name
+  policy_arn = local.get_wp_archive_from_s3_role_policies[count.index]
+}
+
+resource "aws_iam_instance_profile" "get_wp_archive_from_s3_instance_profile" {
+  name = "get_wp_archive_from_s3_instance_profile"
+  role = aws_iam_role.get_wp_archive_from_s3_role.name
+}

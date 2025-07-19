@@ -5,14 +5,20 @@ resource "aws_launch_template" "test_template" {
   name          = "auto_scaling_test"
   image_id      = data.aws_ami.initial_launch_template_ami.id
   instance_type = var.instance_type
+
+  iam_instance_profile {
+    arn = aws_iam_instance_profile.get_wp_archive_from_s3_instance_profile.arn
+  }
+
   user_data = base64encode(
     templatefile(
       "Scripts/user_data.tftpl",
       {
-        db_name     = var.db_name,
-        db_user     = var.db_user,
-        db_password = var.db_password,
-        db_host     = aws_db_instance.wordpress_db.endpoint
+        db_name               = var.db_name,
+        db_user               = var.db_user,
+        db_password           = var.db_password,
+        db_host               = aws_db_instance.wordpress_db.endpoint,
+        wp_archive_object_uri = "${aws_s3_bucket.wordpress_application_data_bucket.id}/${var.wordpress_application_bucket_archive_prefix}/latest.zip"
       }
     )
   )
