@@ -93,3 +93,29 @@ resource "aws_lambda_function" "terminate_instance" {
 
   runtime = var.python_runtime_environment
 }
+
+# AWS Lambda function to set autoscaling group instance count to 0
+resource "aws_lambda_function" "set_asg_to_idle" {
+  filename         = data.archive_file.set_asg_to_idle.output_path
+  function_name    = "set_asg_to_idle"
+  role             = aws_iam_role.update_autoscaling_group_role.arn
+  handler          = "set_asg_to_idle.lambda_handler"
+  source_code_hash = data.archive_file.set_asg_to_idle.output_base64sha256
+
+  timeout = 10
+
+  runtime = var.python_runtime_environment
+}
+
+# AWS Lambda function to set autoscaling group instance count to given size
+resource "aws_lambda_function" "set_asg_to_active" {
+  filename         = data.archive_file.set_asg_to_active.output_path
+  function_name    = "set_asg_to_active"
+  role             = aws_iam_role.update_autoscaling_group_role.arn
+  handler          = "set_asg_to_active.lambda_handler"
+  source_code_hash = data.archive_file.set_asg_to_active.output_base64sha256
+
+  timeout = 10
+
+  runtime = var.python_runtime_environment
+}

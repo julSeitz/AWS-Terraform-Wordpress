@@ -202,3 +202,21 @@ resource "aws_iam_instance_profile" "get_wp_archive_from_s3_instance_profile" {
   name = "get_wp_archive_from_s3_instance_profile"
   role = aws_iam_role.get_wp_archive_from_s3_role.name
 }
+
+# Creating role for updating autoscaling groups
+locals {
+  update_autoscaling_group_role_policies = [
+    data.aws_iam_policy.update_autoscaling_group_policy.arn
+  ]
+}
+
+resource "aws_iam_role" "update_autoscaling_group_role" {
+  name               = "update_autoscaling_group_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "update_autoscaling_group_role_policy_attachments" {
+  count      = length(local.update_autoscaling_group_role_policies)
+  role       = aws_iam_role.update_autoscaling_group_role.name
+  policy_arn = local.update_autoscaling_group_role_policies[count.index]
+}

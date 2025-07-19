@@ -48,6 +48,11 @@ data "aws_iam_policy_document" "assume_role" {
       identifiers = ["scheduler.amazonaws.com"]
     }
 
+    principals {
+      type        = "Service"
+      identifiers = ["autoscaling.amazonaws.com"]
+    }
+
     actions = ["sts:AssumeRole"]
   }
 }
@@ -106,6 +111,10 @@ data "aws_iam_policy" "get_wp_archive_from_s3_policy" {
   name = "GetWPArchiveFromS3"
 }
 
+data "aws_iam_policy" "update_autoscaling_group_policy" {
+  name = "UpdateAutoscalingGroup"
+}
+
 # Defining data sources for ZIP archives of AWS Lambda Functions
 
 data "archive_file" "run_instance" {
@@ -142,4 +151,16 @@ data "archive_file" "terminate_instance" {
   type        = "zip"
   source_file = "Lambda-Functions/src/terminate_instance.py"
   output_path = "Lambda-Functions/archive/terminate_instance.zip"
+}
+
+data "archive_file" "set_asg_to_idle" {
+  type        = "zip"
+  source_file = "Lambda-Functions/src/set_asg_to_idle.py"
+  output_path = "Lambda-Functions/archive/set_asg_to_idle.zip"
+}
+
+data "archive_file" "set_asg_to_active" {
+  type        = "zip"
+  source_file = "Lambda-Functions/src/set_asg_to_active.py"
+  output_path = "Lambda-Functions/archive/set_asg_to_active.zip"
 }
