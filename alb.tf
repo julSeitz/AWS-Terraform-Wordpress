@@ -2,6 +2,7 @@
 
 # Creating Application Load Balancer
 resource "aws_lb" "wordpress" {
+  count              = var.set_infrastructure_to_savings_mode ? 0 : 1
   name               = "wordpress-app-lb"
   internal           = false
   load_balancer_type = "application"
@@ -11,7 +12,8 @@ resource "aws_lb" "wordpress" {
 
 # Creating Listener for Application Load Balancer
 resource "aws_lb_listener" "wordpress_listener" {
-  load_balancer_arn = aws_lb.wordpress.arn
+  count             = var.set_infrastructure_to_savings_mode ? 0 : 1
+  load_balancer_arn = aws_lb.wordpress[count.index].arn
   port              = "80"
   protocol          = "HTTP"
 
