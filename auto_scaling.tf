@@ -78,7 +78,7 @@ resource "aws_autoscaling_group" "test_autoscaling_group" {
 
   launch_template {
     id      = aws_launch_template.test_template.id
-    version = aws_launch_template.test_template.latest_version
+    version = "$Default"
   }
 
   health_check_type         = "EC2"
