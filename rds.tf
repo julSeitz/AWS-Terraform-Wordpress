@@ -18,13 +18,14 @@ resource "aws_db_instance" "wordpress_db" {
   instance_class         = "db.t4g.micro"
   engine_version         = "10.5"
   username               = var.db_user
-  password               = var.db_password
   vpc_security_group_ids = [aws_security_group.mariadb_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.wp_private_subnets.name
   allocated_storage      = 5
   storage_type           = "gp2"
   multi_az               = false
   skip_final_snapshot    = true
+
+  manage_master_user_password = true
 }
 
 resource "aws_rds_instance_state" "wordpress_db_state" {
