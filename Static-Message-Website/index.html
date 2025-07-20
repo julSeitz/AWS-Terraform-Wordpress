@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Unavailable</title>
+    <style>
+        /* Basic Reset & Font Setup */
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg-color: #ffffff;
+            --primary-text-color: #333333;
+            --secondary-text-color: #666666;
+            --accent-color: #007bff;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Message Card Styling */
+        .message-container {
+            background-color: var(--card-bg-color);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        /* SVG Icon Styling */
+        .icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--secondary-text-color);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        strong {
+            color: var(--primary-text-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="message-container">
+        <!-- SVG Clock Icon -->
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+
+        <h1>Service Currently Unavailable</h1>
+        <p>
+            The website you are trying to reach is available:
+        </p>
+        <p>
+            <strong>Monday – Friday</strong><br>
+            <strong>08:00 – 18:00</strong> (Europe/Berlin Timezone)
+        </p>
+    </div>
+
+</body>
+</html>
