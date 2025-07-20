@@ -151,3 +151,10 @@ variable "deactivate_savings_mode_cron_expression" {
   description = "The cron expression to schedule the deactication of savings mode"
   type        = string
 }
+
+# The variable to determine if infrastructure should be started in savings mode or not
+variable "set_infrastructure_to_savings_mode" {
+  description = "The variable to determine if infrastructure should be started in savings mode or not"
+  type        = bool
+  default     = false
+}

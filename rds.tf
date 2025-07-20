@@ -26,3 +26,8 @@ resource "aws_db_instance" "wordpress_db" {
   multi_az               = false
   skip_final_snapshot    = true
 }
+
+resource "aws_rds_instance_state" "wordpress_db_state" {
+  identifier = aws_db_instance.wordpress_db.identifier
+  state      = var.set_infrastructure_to_savings_mode ? "stopped" : "available"
+}
