@@ -4,6 +4,8 @@
 resource "aws_vpc" "wordpress_vpc" {
   cidr_block = var.vpc_cidr
 
+  enable_dns_hostnames = true
+  enable_dns_support   = true
   tags = {
     Name = "Wordpress VPC"
   }
@@ -43,9 +45,9 @@ resource "aws_vpc_endpoint_policy" "s3_wp_endpoint_policy" {
           "s3:GetObject"
         ],
         "Resource" : [
-          "${aws_s3_bucket.wordpress_application_data_bucket.arn}",
-          "${aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_archive_prefix}/${var.wordpress_application_bucket_archive_file_name}",
-          "${aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_get_secret_php_prefix}/${var.wordpress_application_bucket_get_secret_php_file_name}",
+          "${data.aws_s3_bucket.wordpress_application_data_bucket.arn}",
+          "${data.aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_archive_prefix}/${var.wordpress_application_bucket_archive_file_name}",
+          "${data.aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_get_secret_php_prefix}/${var.wordpress_application_bucket_get_secret_php_file_name}",
 
         ],
         "Condition" : {
@@ -67,4 +69,6 @@ resource "aws_vpc_endpoint" "secrets_manager_wp_endpoint" {
   security_group_ids = [
     aws_security_group.vpc_secrets_manager_endpoint_sg.id
   ]
+
+  private_dns_enabled = true
 }

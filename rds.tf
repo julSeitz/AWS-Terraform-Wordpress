@@ -23,6 +23,7 @@ resource "aws_db_instance" "wordpress_db" {
   storage_type           = "gp2"
   multi_az               = false
   skip_final_snapshot    = true
+  username               = var.db_user
 
   manage_master_user_password = true
 }

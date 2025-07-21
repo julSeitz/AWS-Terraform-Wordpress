@@ -198,3 +198,8 @@ data "archive_file" "resume_database" {
   source_file = "Lambda-Functions/src/resume_database.py"
   output_path = "Lambda-Functions/archive/resume_database.zip"
 }
+
+# Creating data resource for application data S3 bucket
+data "aws_s3_bucket" "wordpress_application_data_bucket" {
+  bucket = var.wordpress_application_bucket_name
+}

@@ -19,7 +19,7 @@ echo "$final_file" > wp-config.php
 
 rm -f ${wp_script_file_name}
 
-sed -i "s/\$wordpress_secret_name/'${wordpress_secret_id}'/" wp-config.php
+sed -i "s/\$wordpress_secret_name/'${wordpress_secret_arn}'/" wp-config.php
 sed -i "s/\$aws_region/'${aws_region}'/" wp-config.php
 sed -i "s/database_name_here/${db_name}/" wp-config.php
 sed -i "s/'username_here'/\$username/" wp-config.php
