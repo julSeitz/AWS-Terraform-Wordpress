@@ -14,7 +14,7 @@ resource "aws_scheduler_schedule" "nightly_ami_build_schedule" {
     role_arn = aws_iam_role.start_step_function_role.arn
   }
 
-  schedule_expression_timezone = "Europe/Berlin"
+  schedule_expression_timezone = var.schedule_timezone
 }
 
 # Creating schedules to activate functions of savings mode
@@ -37,7 +37,7 @@ resource "aws_scheduler_schedule" "set_asg_to_idle_schedule" {
     })
   }
 
-  schedule_expression_timezone = "Europe/Berlin"
+  schedule_expression_timezone = var.schedule_timezone
 }
 
 # Creating EventBridge schedule to trigger Lambda functions to stop RDS instance
@@ -58,7 +58,7 @@ resource "aws_scheduler_schedule" "stop_database_schedule" {
     })
   }
 
-  schedule_expression_timezone = "Europe/Berlin"
+  schedule_expression_timezone = var.schedule_timezone
 }
 
 # Creating schedules to deactivate functions of savings mode
@@ -83,7 +83,7 @@ resource "aws_scheduler_schedule" "set_asg_to_active_schedule" {
     })
   }
 
-  schedule_expression_timezone = "Europe/Berlin"
+  schedule_expression_timezone = var.schedule_timezone
 }
 
 # Creating EventBridge schedule to trigger Lambda functions to resume RDS instance
@@ -104,5 +104,5 @@ resource "aws_scheduler_schedule" "resume_database_schedule" {
     })
   }
 
-  schedule_expression_timezone = "Europe/Berlin"
+  schedule_expression_timezone = var.schedule_timezone
 }

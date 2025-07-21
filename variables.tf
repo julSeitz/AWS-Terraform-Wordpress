@@ -182,3 +182,9 @@ variable "wordpress_application_bucket_get_secret_php_prefix" {
   description = "The prefix for the php script within S3 bucket to get secret for WordPress application"
   type        = string
 }
+
+# The timezone for EventBridge schedules
+variable "schedule_timezone" {
+  description = "The timezone for EventBridge schedules"
+  type        = string
+}
