@@ -17,7 +17,6 @@ resource "aws_db_instance" "wordpress_db" {
   engine                 = "mariadb"
   instance_class         = "db.t4g.micro"
   engine_version         = "10.5"
-  username               = var.db_user
   vpc_security_group_ids = [aws_security_group.mariadb_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.wp_private_subnets.name
   allocated_storage      = 5
@@ -26,9 +25,4 @@ resource "aws_db_instance" "wordpress_db" {
   skip_final_snapshot    = true
 
   manage_master_user_password = true
-}
-
-resource "aws_rds_instance_state" "wordpress_db_state" {
-  identifier = aws_db_instance.wordpress_db.identifier
-  state      = var.set_infrastructure_to_savings_mode ? "stopped" : "available"
 }

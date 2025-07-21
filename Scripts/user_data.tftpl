@@ -3,12 +3,25 @@
 # Downloading Wordpress
 cd /var/www/html
 aws s3 cp s3://${wp_archive_object_uri} .
-unzip latest.zip
+unzip ${wp_archive_file_name}
 cp -r wordpress/* .
-rm -rf wordpress latest.zip
+rm -rf wordpress ${wp_archive_file_name}
 
 cp wp-config-sample.php wp-config.php
+
+aws s3 cp s3://${wp_script_object_uri} .
+
+first_stage=$(head -20 wp-config-sample.php)
+middle_stage="$(cat ${wp_script_file_name})"
+end_stage=$(tail -n +20 wp-config-sample.php)
+final_file=$(echo "$first_stage" ; echo "$middle_stage" ; echo "$end_stage")
+echo "$final_file" > wp-config.php
+
+rm -f ${wp_script_file_name}
+
+sed -i "s/\$wordpress_secret_name/'${wordpress_secret_id}'/" wp-config.php
+sed -i "s/\$aws_region/'${aws_region}'/" wp-config.php
 sed -i "s/database_name_here/${db_name}/" wp-config.php
-sed -i "s/username_here/${db_user}/" wp-config.php
-sed -i "s/password_here/${db_password}/" wp-config.php
+sed -i "s/'username_here'/\$username/" wp-config.php
+sed -i "s/'password_here'/\$password/" wp-config.php
 sed -i "s/localhost/${db_host}/" wp-config.php

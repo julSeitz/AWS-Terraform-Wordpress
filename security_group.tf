@@ -153,3 +153,31 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_db" {
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
+
+# Creating Security Group for Secrets Manager VPC Endpoint  and relevant rules
+
+# Creating Security Group for Secrets Manager VPC Endpoint
+resource "aws_security_group" "vpc_secrets_manager_endpoint_sg" {
+  name        = "vpc_secrets_manager_endpoint_sg"
+  description = "Allows access to VPC Endpoint for AWS Secrets Manager from WordPress Servers"
+  vpc_id      = aws_vpc.wordpress_vpc.id
+
+  tags = {
+    Name = "Secrets Manager VPC Endpoint SG"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_https_ingress_rule_vpc_endpoint" {
+  security_group_id            = aws_security_group.vpc_secrets_manager_endpoint_sg.id
+  referenced_security_group_id = aws_security_group.webserver_sg.id
+  from_port                    = 443
+  to_port                      = 443
+  ip_protocol                  = "tcp"
+}
+
+# Adding egress rule allowing all traffic to vpc_secrets_manager_endpoint_sg
+resource "aws_vpc_security_group_egress_rule" "allow_all_egress_ipv4_rule_vpc_endpoint" {
+  security_group_id = aws_security_group.vpc_secrets_manager_endpoint_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}

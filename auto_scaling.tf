@@ -7,16 +7,20 @@ resource "aws_launch_template" "test_template" {
   instance_type = var.instance_type
 
   iam_instance_profile {
-    arn = aws_iam_instance_profile.get_wp_archive_from_s3_instance_profile.arn
+    arn = aws_iam_instance_profile.wp_application_instance_profile.arn
   }
 
   user_data = base64encode(
     templatefile(
       "Scripts/user_data.tftpl",
       {
+        wordpress_secret_id   = var.wordpress_secret_id,
+        aws_region            = var.aws_region,
+        wp_script_file_name   = "${var.wordpress_application_bucket_get_secret_php_file_name}"
+        wp_archive_file_name  = "${var.wordpress_application_bucket_archive_file_name}"
+        wp_archive_object_uri = "${aws_s3_bucket.wordpress_application_data_bucket.id}/${var.wordpress_application_bucket_archive_prefix}/${var.wordpress_application_bucket_archive_file_name}",
+        wp_script_object_uri  = "${aws_s3_bucket.wordpress_application_data_bucket.id}/${var.wordpress_application_bucket_get_secret_php_prefix}/${var.wordpress_application_bucket_get_secret_php_file_name}"
         db_name               = var.db_name,
-        db_user               = var.db_user,
-        db_password           = var.db_password,
         db_host               = aws_db_instance.wordpress_db.endpoint,
         wp_archive_object_uri = "${aws_s3_bucket.wordpress_application_data_bucket.id}/${var.wordpress_application_bucket_archive_prefix}/latest.zip"
       }

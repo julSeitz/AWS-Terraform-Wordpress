@@ -107,8 +107,18 @@ data "aws_iam_policy" "start_step_function_policy" {
   name = "StartStepFunction"
 }
 
+data "aws_iam_policy" "get_code_to_retrieve_secrets_from_s3_policy" {
+  name = "GetCodeToRetrieveSecretsFromS3"
+}
+
 data "aws_iam_policy" "get_wp_archive_from_s3_policy" {
   name = "GetWPArchiveFromS3"
+}
+
+
+
+data "aws_iam_policy" "get_wp_secret_policy" {
+  name = "GetWPSecret"
 }
 
 data "aws_iam_policy" "update_autoscaling_group_policy" {

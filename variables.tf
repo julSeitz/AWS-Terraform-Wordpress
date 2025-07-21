@@ -134,9 +134,15 @@ variable "wordpress_application_bucket_name" {
   type        = string
 }
 
-# The prefix for the archive of WordPress application files within the S3 bucket
+# The prefix of the archive of WordPress application files within the S3 bucket
 variable "wordpress_application_bucket_archive_prefix" {
-  description = "The prefix for the archive of WordPress application files within the S3 bucket"
+  description = "The prefix of the archive of WordPress application files within the S3 bucket"
+  type        = string
+}
+
+# The file name of the archive of WordPress application files within the S3 bucket
+variable "wordpress_application_bucket_archive_file_name" {
+  description = "The file name of the archive of WordPress application files within the S3 bucket"
   type        = string
 }
 
@@ -157,4 +163,22 @@ variable "set_infrastructure_to_savings_mode" {
   description = "The variable to determine if infrastructure should be started in savings mode or not"
   type        = bool
   default     = false
+}
+
+# The name of the secret for the wordpress RDS database
+variable "wordpress_secret_id" {
+  description = "The name of the secret for the wordpress RDS database"
+  type        = string
+}
+
+# The file name for the php script within S3 bucket to get secret for WordPress application
+variable "wordpress_application_bucket_get_secret_php_file_name" {
+  description = "The file name for the php script within S3 bucket to get secret for WordPress application"
+  type        = string
+}
+
+# The prefix for the php script within S3 bucket to get secret for WordPress application
+variable "wordpress_application_bucket_get_secret_php_prefix" {
+  description = "The prefix for the php script within S3 bucket to get secret for WordPress application"
+  type        = string
 }
