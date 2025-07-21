@@ -44,14 +44,27 @@ resource "aws_vpc_endpoint_policy" "s3_wp_endpoint_policy" {
         ],
         "Resource" : [
           "${aws_s3_bucket.wordpress_application_data_bucket.arn}",
-          "${aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_archive_prefix}/latest.zip"
+          "${aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_archive_prefix}/${var.wordpress_application_bucket_archive_file_name}",
+          "${aws_s3_bucket.wordpress_application_data_bucket.arn}/${var.wordpress_application_bucket_get_secret_php_prefix}/${var.wordpress_application_bucket_get_secret_php_file_name}",
+
         ],
         "Condition" : {
           "StringEquals" : {
-            "aws:PrincipalArn" : "${aws_iam_role.get_wp_archive_from_s3_role.arn}"
+            "aws:PrincipalArn" : "${aws_iam_role.wp_application_role.arn}"
           }
         }
       }
     ]
   })
+}
+
+# Creating VPC Interface endpoint for AWS Secrets Manager
+resource "aws_vpc_endpoint" "secrets_manager_wp_endpoint" {
+  vpc_id            = aws_vpc.wordpress_vpc.id
+  vpc_endpoint_type = "Interface"
+  service_name      = "com.amazonaws.${var.aws_region}.secretsmanager"
+  subnet_ids        = local.private_subnet_ids
+  security_group_ids = [
+    aws_security_group.vpc_secrets_manager_endpoint_sg.id
+  ]
 }
