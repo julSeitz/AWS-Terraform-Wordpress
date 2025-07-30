@@ -33,6 +33,9 @@ def lambda_handler(event, context):
 
 # For Amazon Linux 2023
 
+# Setting HOME variable for installation
+export HOME=/root
+
 # Installing apache
 yum update -y
 yum install -y httpd
@@ -42,7 +45,7 @@ systemctl start httpd
 systemctl enable httpd
 
 # Installing php and mariadb
-yum install -y php php-mysqlnd mariadb105-server
+yum install -y php php-mysqlnd mariadb105-server git
 
 # Starting and enabling MariaDB
 systemctl start mariadb
@@ -58,17 +61,23 @@ echo 'no' | pecl install apcu
 echo 'extension=apcu.so' > /etc/php.d/20-apcu.ini
 systemctl restart php-fpm.service
 
+# Setting permissions
+
+usermod -a -G apache ec2-user
+cd /var/www
+chown -R ec2-user:apache html
+chmod 2755 html
+
+
 # Installing composer
 
 cd /var/www/html
-chown ec2-user .
-su ec2-user -c "wget https://getcomposer.org/installer"
-chmod +x installer
-su ec2-user -c "php installer"
-mv composer.phar /usr/local/bin/composer
+wget https://getcomposer.org/installer
+php installer --install-dir=/usr/local/bin --filename=composer
+chmod 755 /usr/local/bin/composer
 rm installer
-su ec2-user -c "composer --version"
-su ec2-user -c "composer require aws/aws-sdk-php"
+sudo -u ec2-user composer --version
+sudo -u ec2-user composer require aws/aws-sdk-php
 
 instance_id=$(ec2-metadata -i | cut -d" " -f2)
 aws ec2 create-tags --resources $instance_id --tags 'Key="UserDataFinished",Value="True"'"""

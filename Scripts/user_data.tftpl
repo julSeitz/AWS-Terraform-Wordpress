@@ -7,7 +7,8 @@ unzip ${wp_archive_file_name}
 cp -r wordpress/* .
 rm -rf wordpress ${wp_archive_file_name}
 
-cp wp-config-sample.php wp-config.php
+mkdir wp-content/uploads
+mkdir wp-content/upgrade
 
 aws s3 cp s3://${wp_script_object_uri} .
 
@@ -15,7 +16,7 @@ first_stage=$(head -20 wp-config-sample.php)
 middle_stage="$(cat ${wp_script_file_name})"
 end_stage=$(tail -n +20 wp-config-sample.php)
 final_file=$(echo "$first_stage" ; echo "$middle_stage" ; echo "$end_stage")
-echo "$final_file" > wp-config.php
+echo "$final_file" >> wp-config.php
 
 rm -f ${wp_script_file_name}
 
@@ -25,3 +26,13 @@ sed -i "s/database_name_here/${db_name}/" wp-config.php
 sed -i "s/'username_here'/\$username/" wp-config.php
 sed -i "s/'password_here'/\$password/" wp-config.php
 sed -i "s/localhost/${db_host}/" wp-config.php
+
+# Modifying file and directory ownership
+chown -R ec2-user:apache ./*
+
+find . -type d -exec chmod 2755 {} \;
+find . -type f -exec chmod 0644 {} \;
+
+chmod -R g+w wp-content/uploads
+chmod -R g+w wp-content/upgrade
+chmod 0440 wp-config.php
