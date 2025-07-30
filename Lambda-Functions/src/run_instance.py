@@ -57,6 +57,7 @@ systemctl restart httpd
 # Installing APCU
 
 yum install -y php-devel php-pear
+pecl channel-update pecl.php.net
 echo 'no' | pecl install apcu
 echo 'extension=apcu.so' > /etc/php.d/20-apcu.ini
 systemctl restart php-fpm.service
