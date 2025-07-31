@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 # Downloading Wordpress
 cd /var/www/html
 aws s3 cp s3://${wp_archive_object_uri} .

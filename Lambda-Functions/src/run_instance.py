@@ -31,6 +31,8 @@ def lambda_handler(event, context):
       ],
       UserData="""#!/bin/bash
 
+set -ex
+
 # For Amazon Linux 2023
 
 # Setting HOME variable for installation
