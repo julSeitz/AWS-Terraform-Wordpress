@@ -49,13 +49,6 @@ variable "private_subnet_b_cidr" {
   type        = string
 }
 
-# The WP database password
-variable "db_password" {
-  description = "Password for the wordpress database"
-  type        = string
-  sensitive   = true
-}
-
 # The first Availability Zone
 variable "aws_availability_zone_a" {
   type        = string
