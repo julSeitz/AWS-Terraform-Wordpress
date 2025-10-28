@@ -19,7 +19,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh_rule_bastion" {
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"
-  cidr_ipv4         = "${data.http.my_ip.response_body}/32"
+  cidr_ipv4         = "0.0.0.0/0"
 }
 
 # Adding egress rule allowing all egress traffic to bastion_host_sg Security Group
@@ -77,7 +77,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_rule_alb" {
   from_port         = 80
   to_port           = 80
   ip_protocol       = "tcp"
-  cidr_ipv4         = "${data.http.my_ip.response_body}/32"
+  cidr_ipv4         = "0.0.0.0/0"
 }
 
 # Adding egress rule allowing all egress traffic from alb_sg
@@ -98,15 +98,6 @@ resource "aws_security_group" "webserver_sg" {
   tags = {
     Name = "Web Server SG"
   }
-}
-
-# Adding ingress rule allowing HTTP access to webserver_sg from current IP
-resource "aws_vpc_security_group_ingress_rule" "allow_http_rule_webserver" {
-  security_group_id = aws_security_group.webserver_sg.id
-  from_port         = 80
-  to_port           = 80
-  ip_protocol       = "tcp"
-  cidr_ipv4         = "${data.http.my_ip.response_body}/32"
 }
 
 # Adding ingress rule allowing HTTP acces to webserver_sg from alb_sg
