@@ -49,13 +49,6 @@ variable "private_subnet_b_cidr" {
   type        = string
 }
 
-# The WP database password
-variable "db_password" {
-  description = "Password for the wordpress database"
-  type        = string
-  sensitive   = true
-}
-
 # The first Availability Zone
 variable "aws_availability_zone_a" {
   type        = string
@@ -163,12 +156,6 @@ variable "set_infrastructure_to_savings_mode" {
   description = "The variable to determine if infrastructure should be started in savings mode or not"
   type        = bool
   default     = false
-}
-
-# The name of the secret for the wordpress RDS database
-variable "wordpress_secret_id" {
-  description = "The name of the secret for the wordpress RDS database"
-  type        = string
 }
 
 # The file name for the php script within S3 bucket to get secret for WordPress application
