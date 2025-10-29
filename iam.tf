@@ -179,13 +179,31 @@ resource "aws_iam_role_policy_attachment" "start_step_function_role_policy_attac
   policy_arn = local.start_step_function_role_policies[count.index]
 }
 
+# Creating IAM policy for retrieving ARN of WP database secret
+resource "aws_iam_policy" "get_wp_secret_policy" {
+  name        = "GetWPSecret"
+  description = "Allows to retrieve ARN of WP database secret"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ],
+        Resource = "${aws_db_instance.wordpress_db.master_user_secret[0].secret_arn}"
+      }
+    ]
+  })
+}
+
 # Creating IAM role and instance profile for WP application
 
 locals {
   wp_application_role_policies = [
     data.aws_iam_policy.get_wp_archive_from_s3_policy.arn,
     data.aws_iam_policy.get_code_to_retrieve_secrets_from_s3_policy.arn,
-    data.aws_iam_policy.get_wp_secret_policy.arn
+    aws_iam_policy.get_wp_secret_policy.arn
   ]
 }
 

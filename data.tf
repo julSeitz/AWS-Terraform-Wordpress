@@ -115,12 +115,6 @@ data "aws_iam_policy" "get_wp_archive_from_s3_policy" {
   name = "GetWPArchiveFromS3"
 }
 
-
-
-data "aws_iam_policy" "get_wp_secret_policy" {
-  name = "GetWPSecret"
-}
-
 data "aws_iam_policy" "update_autoscaling_group_policy" {
   name = "UpdateAutoscalingGroup"
 }

@@ -158,12 +158,6 @@ variable "set_infrastructure_to_savings_mode" {
   default     = false
 }
 
-# The name of the secret for the wordpress RDS database
-variable "wordpress_secret_id" {
-  description = "The name of the secret for the wordpress RDS database"
-  type        = string
-}
-
 # The file name for the php script within S3 bucket to get secret for WordPress application
 variable "wordpress_application_bucket_get_secret_php_file_name" {
   description = "The file name for the php script within S3 bucket to get secret for WordPress application"
