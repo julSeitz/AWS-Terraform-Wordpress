@@ -28,13 +28,5 @@ It is currently hosting a WordPress blog as an example application.
 
 <img width="875" height="1254" alt="stepfunctions_graph" src="https://github.com/user-attachments/assets/831fda6a-bece-4697-a05e-c1e0764be278" />
 
- 
-- An AWS Lambda function that sets the number of instances in the EC2 Autoscaling Group to zero and stops the database instance
-  - Called every evening during the week by an AWS EventBridge schedule, to make parts of the infrastructure run only during regular business hours
- 
-<img width="681" height="401" alt="Savings-Mode-Activation-Diagram drawio" src="https://github.com/user-attachments/assets/35137c54-aa0f-4b96-857f-de0395cbb7c8" />
-
-- An AWS Lambda function that sets the number of instances in the EC2 Autoscaling Group to the configured size and starts the database instance
-  - Called every morning during the week by an AWS EventBridge schedules to make parts of the infrastructure run only during regular business hours
-
-<img width="681" height="401" alt="Savings-Mode-Deactivation-Diagram drawio" src="https://github.com/user-attachments/assets/74214113-67e2-4bf2-8da8-c7d95ad9cd88" />
+- By using scheduled GitHub Actions workflows and HCP Terraform, parts of the infrastructure are destroyed at the end of regular business hours and recreated at the beginning of regular business hours.  
+This reduces operational costs by running user facing parts of the infrastructure only when they are most likely to be used, while keeping the Terraform state consistent. 
