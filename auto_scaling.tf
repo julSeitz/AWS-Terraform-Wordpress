@@ -78,7 +78,7 @@ resource "aws_autoscaling_group" "test_autoscaling_group" {
   name             = "test_autoscaling_group"
   max_size         = var.savings_mode ? 0 : var.autoscaling_max_capacity
   min_size         = var.savings_mode ? 0 : var.autoscaling_min_capacity
-  desired_capacity = var.autoscaling_desired_capacity
+  desired_capacity = var.savings_mode ? 0 : var.autoscaling_desired_capacity
 
   launch_template {
     id      = aws_launch_template.test_template.id
