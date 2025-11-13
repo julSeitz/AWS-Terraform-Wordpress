@@ -175,3 +175,10 @@ variable "schedule_timezone" {
   description = "The timezone for EventBridge schedules"
   type        = string
 }
+
+# The variable to determine if infrastructure should be constructed in savings mode or not
+variable "savings_mode" {
+  description = "The variable to determine if infrastructure should be constructed in savings mode or not"
+  type        = bool
+  default     = true
+}
