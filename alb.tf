@@ -2,7 +2,7 @@
 
 # Creating Application Load Balancer
 resource "aws_lb" "wordpress" {
-  count              = var.set_infrastructure_to_savings_mode ? 0 : 1
+  count              = var.savings_mode ? 0 : 1
   name               = "wordpress-app-lb"
   internal           = false
   load_balancer_type = "application"
@@ -12,19 +12,20 @@ resource "aws_lb" "wordpress" {
 
 # Creating Listener for Application Load Balancer
 resource "aws_lb_listener" "wordpress_listener" {
-  count             = var.set_infrastructure_to_savings_mode ? 0 : 1
+  count             = var.savings_mode ? 0 : 1
   load_balancer_arn = aws_lb.wordpress[count.index].arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.autoscaling_tg.arn
+    target_group_arn = aws_lb_target_group.autoscaling_tg[count.index].arn
   }
 }
 
 # Creating ALB Target Group for Autoscaling Group
 resource "aws_lb_target_group" "autoscaling_tg" {
+  count    = var.savings_mode ? 0 : 1
   name     = "autoscaling-tg"
   port     = 80
   protocol = "HTTP"

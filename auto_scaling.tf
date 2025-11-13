@@ -93,6 +93,7 @@ resource "aws_autoscaling_group" "test_autoscaling_group" {
 
 # Attaching Autscaling Group to ALB Target Group
 resource "aws_autoscaling_attachment" "autoscaling_attachment" {
+  count                  = var.savings_mode ? 0 : 1
   autoscaling_group_name = aws_autoscaling_group.test_autoscaling_group.id
-  lb_target_group_arn    = aws_lb_target_group.autoscaling_tg.arn
+  lb_target_group_arn    = aws_lb_target_group.autoscaling_tg[count.index].arn
 }
