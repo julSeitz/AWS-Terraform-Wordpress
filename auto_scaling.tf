@@ -77,7 +77,7 @@ resource "aws_autoscaling_group" "test_autoscaling_group" {
   depends_on       = [aws_route_table_association.private_route_table_association]
   name             = "test_autoscaling_group"
   max_size         = var.savings_mode ? 0 : var.autoscaling_max_capacity
-  min_size         = var.savings_mode ? 0 : var.autoscaling_max_capacity
+  min_size         = var.savings_mode ? 0 : var.autoscaling_min_capacity
   desired_capacity = var.autoscaling_desired_capacity
 
   launch_template {
