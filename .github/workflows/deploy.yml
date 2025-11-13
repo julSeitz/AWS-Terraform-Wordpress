@@ -63,4 +63,27 @@ jobs:
         name: Log input from previous job
         run: |
           echo "Savings Mode: ${{ env.TF_VAR_savings_mode }}"
+
+      - uses: actions/checkout@v3
+
+      - uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.2
+        id: upload
+        name: Upload run configuration
+        with:
+          directory: "."
+          workspace: ${{ env.TF_WORKSPACE }}
+
+      - uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.0
+        id: create-run
+        name: Create Terraform run
+        with:
+          workspace: ${{ env.TF_WORKSPACE}}
+          configuration_version: ${{ steps.upload.outputs.configuration_version_id }}
+
+      - uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.3.2
+        id: apply
+        name: Apply Terraform run
+        with:
+          run: ${{ steps.create-run.outputs.run_id}}
+        
         
