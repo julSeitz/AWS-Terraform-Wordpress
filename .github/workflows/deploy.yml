@@ -1,0 +1,66 @@
+name: Deploy workflow
+on: 
+  push:
+  workflow_dispatch:
+
+jobs:
+
+  determine-savings-mode:
+    runs-on: ubuntu-latest
+    outputs:
+      savings_mode: ${{ steps.check-savings-mode-timeframe.outputs.in_savings_mode_timeframe == 'true' || contains(fromJson(vars.WEEKEND_DAYS_JSON), steps.get-call-timestamp-and-weekday.outputs.weekday) }}
+    steps:
+
+      - id: get-call-timestamp-and-weekday
+        name: Get timestamp of call and corresponding weekday
+        run: |
+          call_time=$(TZ=${{ vars.TIMEZONE }} date "+%H:%M")
+          echo $call_time
+          call_timestamp=$(TZ=${{ vars.TIMEZONE }} date -d $call_time +'%s')
+          echo "call_timestamp=$call_timestamp" | tee -a $GITHUB_OUTPUT
+          weekday=$(TZ=${{ vars.TIMEZONE }} date +'%A')
+          echo "weekday=$weekday" | tee -a $GITHUB_OUTPUT
+      
+      - id: get-savings-mode-start-ts
+        name: Get savings mode start time as timestamp
+        run: |
+          start_timestamp=$(TZ=${{ vars.TIMEZONE }} date -d '${{ vars.savings_mode_start_time }}' +'%s')
+          echo "start_timestamp=$start_timestamp" | tee -a $GITHUB_OUTPUT
+      
+      - id: get-savings-mode-end-ts
+        name: Get savings mode end time as timestamp
+        run: |
+          end_timestamp=$(TZ=${{ vars.TIMEZONE }} date -d '${{ vars.savings_mode_end_time }}' +'%s')
+          echo "end_timestamp=$end_timestamp" | tee -a $GITHUB_OUTPUT
+
+      - id: check-savings-mode-timeframe
+        name: Retrieve timestamps and check if call is in timeframe for savings mode
+        run: |
+          call_timestamp=${{ steps.get-call-timestamp-and-weekday.outputs.call_timestamp }}
+          start_timestamp=${{ steps.get-savings-mode-start-ts.outputs.start_timestamp }}
+          end_timestamp=${{ steps.get-savings-mode-end-ts.outputs.end_timestamp }}
+
+          if [[ $start_timestamp -ge $call_timestamp && $end_timestamp -le $call_timestamp ]]; then
+            echo "in_savings_mode_timeframe=false" | tee -a $GITHUB_OUTPUT
+          else
+            echo "in_savings_mode_timeframe=true" | tee -a $GITHUB_OUTPUT
+          fi
+        
+
+
+  call-hcp-terraform-api:
+    runs-on: ubuntu-latest
+    needs:
+      determine-savings-mode
+    env:
+      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+      TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
+      TF_VAR_savings_mode: ${{ needs.determine-savings-mode.outputs.savings_mode }}
+
+    steps:
+      - id: log-input-from-previous-job
+        name: Log input from previous job
+        run: |
+          echo "Savings Mode: ${{ env.TF_VAR_savings_mode }}"
+        
