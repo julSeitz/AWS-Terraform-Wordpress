@@ -9,7 +9,7 @@ resource "aws_instance" "bastion_host" {
   instance_type = var.instance_type
   key_name      = var.key_name
   subnet_id     = element(local.public_subnet_ids, count.index)
-  security_groups = [
+  vpc_security_group_ids = [
     aws_security_group.bastion_host_sg.id
   ]
 
