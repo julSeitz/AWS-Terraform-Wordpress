@@ -4,7 +4,7 @@
 
 # Creating Bastion Host
 resource "aws_instance" "bastion_host" {
-  count         = 2
+  count         = var.savings_mode ? 0 : 2
   ami           = data.aws_ssm_parameter.amz_linux.value
   instance_type = var.instance_type
   key_name      = var.key_name
